@@ -9,31 +9,54 @@
         <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
         <link rel="stylesheet" href="/css/login.css">
         
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+        
 
         <title>Student Login</title>
     </head>
     <body class="h-vh-100">
         <div class="bg-student"></div>
-        <form class="login-form clogin-pos bg-white p-6 mx-auto border bd-default win-shadow" data-role="validator"
-            action="javascript:" data-clear-invalid="2000" data-on-error-form="invalidForm" data-on-validate-form="validateForm">
-            <span class="mif-vpn-lock mif-4x place-right mt-2-minus"></span>
+        <form class="login-form clogin-pos bg-white p-6 mx-auto border bd-default win-shadow"
+            method="POST" action="/routes/index1">
+            <span class="msif-vpn-lock mif-4x place-right mt-2-minus"></span>
             <h2 class="text-light">Student Login</h2>
             <hr class="thin mt-4 mb-4 bg-white">
             <div class="form-group">
-                <input type="text" data-role="input" data-prepend="<span class='mif-envelop'>" placeholder="Enter your USN...">
+                <input type="text"  id="usn" data-role="input" data-prepend="<span class='mif-envelop'>" placeholder="Enter your USN...">
             </div>
             <div class="form-group">
-                <input type="password" data-role="input" data-prepend="<span class='mif-key'>" placeholder="Enter your password..."
+                <input type="password"  id ="pass" data-role="input" data-prepend="<span class='mif-key'>" placeholder="Enter your password..."
                     data-validate="required minlength=6">
             </div>
             <div class="form-group mt-10">
                 <input type="checkbox" data-role="checkbox" data-caption="Remember me" class="place-right">
-                <button class="button" formaction="#">Login</button>
+                <button class="button">Login</button>
                 <button class="button" formaction="signup.html">Signup</button>
                 <a href="#">Forgot the Password...?</a>
             </div>
         </form>
     </body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+<script type="text/javascript" >
+$('#usn').change(() => {
+    var data = { usn : $('#usn').val(), pass: $('#pass').val()};
+    var url = `${location.protocol}//${location.host}/routes/index1`;
+    // Function which displays whether the USN is avaialable for use or not
+    displayMessage = (res) => {
+        $("#usn_response").show();
+        if(res.usn) {
+            $("#usn_response").html("<span class='not-exists'>* USN Already in use.</span>");       
+        }
+        else {
+            $("#usn_response").html("<span class='exists'>Available.</span>");
+        }
+    }
+    // Ajax request to check the existence of USN
+    $.ajax({
+        url:url,
+        data:data,
+        success:displayMessage
+    });
+});
+</script>
 </html>
